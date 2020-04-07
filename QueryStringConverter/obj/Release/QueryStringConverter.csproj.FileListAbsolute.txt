@@ -1,0 +1,9 @@
+G:\Tools\QueryStringConverter\QueryStringConverter\bin\Release\QueryStringConverter.exe.config
+G:\Tools\QueryStringConverter\QueryStringConverter\bin\Release\QueryStringConverter.exe
+G:\Tools\QueryStringConverter\QueryStringConverter\bin\Release\QueryStringConverter.pdb
+G:\Tools\QueryStringConverter\QueryStringConverter\obj\Release\QueryStringConverter.Form1.resources
+G:\Tools\QueryStringConverter\QueryStringConverter\obj\Release\QueryStringConverter.Properties.Resources.resources
+G:\Tools\QueryStringConverter\QueryStringConverter\obj\Release\QueryStringConverter.csproj.GenerateResource.Cache
+G:\Tools\QueryStringConverter\QueryStringConverter\obj\Release\QueryStringConverter.csproj.CoreCompileInputs.cache
+G:\Tools\QueryStringConverter\QueryStringConverter\obj\Release\QueryStringConverter.exe
+G:\Tools\QueryStringConverter\QueryStringConverter\obj\Release\QueryStringConverter.pdb
