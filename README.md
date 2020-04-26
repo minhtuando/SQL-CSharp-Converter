@@ -14,7 +14,7 @@ A light and useful tool for converting between SQL query and C# programming lang
 
 ### Installing
 
-Run and build the mail solution **QueryStringConverter.sln** with Visual Studio.
+Run and build the main solution **QueryStringConverter.sln** with Visual Studio.
 
 You can also run the ready-to-use exe in ```bin\Debug``` folder.
 
