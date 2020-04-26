@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace QueryStringConverter
 {
@@ -15,13 +16,17 @@ namespace QueryStringConverter
     {
         public MainForm()
         {
-            InitializeComponent();            
-        }       
+            InitializeComponent();
+
+            txtCCode.EnableContextMenu();
+            txtMappingModel.EnableContextMenu();
+            txtSQLQuery.EnableContextMenu();
+        }
 
         private void btnSQLToC_Click(object sender, EventArgs e)
         {
             try
-            {                
+            {
                 string sqlQuery = txtSQLQuery.Text;
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("StringBuilder sb = new StringBuilder();");
@@ -39,7 +44,7 @@ namespace QueryStringConverter
                 sb.AppendLine();
                 sb.AppendLine();
 
-                var pattern = @"@[a-zA-Z]+";
+                var pattern = @"@[a-zA-Z0-9]+";
                 Match match = Regex.Match(sqlQuery, pattern, RegexOptions.IgnoreCase);
 
                 List<string> parameters = new List<string>();
@@ -73,7 +78,7 @@ namespace QueryStringConverter
                     {
                         queryAndParam = string.Join(",", parameters);
                     }
-                    sb.Append("var result = context.Query<>(query, new { " + queryAndParam + " }).ToList();");
+                    sb.Append("var result = db.Query<>(query, new { " + queryAndParam + " }).ToList();");
                 }
                 else
                 {
@@ -87,7 +92,7 @@ namespace QueryStringConverter
                         });
                     }
 
-                    sb.AppendFormat("var result = context.Database.SqlQuery<>({0}).ToList();", queryAndParam);
+                    sb.AppendFormat("var result = db.Database.SqlQuery<>({0}).ToList();", queryAndParam);
                 }
 
                 sb.AppendLine();
@@ -95,16 +100,88 @@ namespace QueryStringConverter
                 txtCCode.Text = sb.ToString();
                 //Copy vào clipboard
                 Clipboard.SetText(sb.ToString());
+
+                //Phân tích mapping models
+                var selectClause = txtSQLQuery.Text;
+
+                selectClause = selectClause.Replace(" from ", " FROM ")
+                                            .Replace("[", "")
+                                            .Replace("]", "")
+                                            .Replace("\nfrom ", "\nFROM ")
+                                            .Replace("\n from ", "\nFROM ")
+                                            .Replace("\n FROM ", "\nFROM ");
+
+                if (selectClause.Contains("\nFROM "))
+                {
+                    if (CountStringOccurrences(selectClause, "\nFROM ") == 1)
+                    {
+                        selectClause = selectClause.Substring(0, selectClause.IndexOf("\nFROM "));
+                    }
+                    else
+                    {
+                        selectClause = selectClause.Substring(0, selectClause.LastIndexOf("\nFROM "));
+                    }
+                }
+
+                var fields = selectClause.Split(',');
+
+                sb.Clear();
+
+                foreach (var col in fields)
+                {
+                    string fieldName = col;
+
+                    string type = "int";
+
+
+                    if (fieldName.ToLower().Contains("."))
+                    {
+                        fieldName = fieldName.Substring(fieldName.IndexOf(".") + 1);
+                    }
+
+                    if (fieldName.ToLower().Contains(" as "))
+                    {
+                        string[] aliasMapKeys = { " as ", " As ", " aS ", " AS " };
+
+                        foreach (var key in aliasMapKeys)
+                        {
+                            if (fieldName.Contains(key))
+                            {
+                                fieldName = fieldName.Substring(fieldName.IndexOf(key) + 4);
+                            }
+                        }
+                    }
+
+                    fieldName = fieldName.Replace("select", "");
+                    fieldName = fieldName.Replace("SELECT", "");
+                    fieldName = fieldName.Trim();
+
+                    if (fieldName.Contains(" "))
+                    {
+                        fieldName = fieldName.Substring(0, fieldName.IndexOf(" "));
+                    }
+
+                    if (!string.IsNullOrEmpty(fieldName))
+                    {
+                        type = GetTypeOfField(fieldName);
+
+                        sb.AppendLine($"public { type } { fieldName } {{ get; set; }}");
+                    }
+                }
+
+                txtMappingModel.Text = sb.ToString();
+                //End phân tích
+
             }
-            catch
+            catch (Exception ex)
             {
-                ShowErrorMessage();
+                ShowErrorMessage(ex.Message);
             }
         }
 
-        private void ShowErrorMessage()
+        private void ShowErrorMessage(string msg = "")
         {
-            MessageBox.Show("There was an error with the program. Please check your input and make sure it is in a correct format!", "Opps! The program crashed!");
+            MessageBox.Show("There was an error with the program. " + msg, "Opps! The program crashed!");
         }
 
         private string GetSQLFrameworkChecked()
@@ -161,6 +238,108 @@ namespace QueryStringConverter
             {
                 ShowErrorMessage();
             }
+        }
+
+        private string GetTypeOfField(string fieldName)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load("ConfigDataType.xml");
+
+            var nodes = doc.DocumentElement.SelectNodes("/config/lowerContaints/mapData");
+
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                if (string.IsNullOrEmpty(nodes[i].InnerText.Trim()))
+                {
+                    continue;
+                }
+                string[] mappingKeys = nodes[i].InnerText.Split(',');
+
+                foreach (var key in mappingKeys)
+                {
+                    if (fieldName.ToLower().Contains(key.Trim()))
+                    {
+                        return nodes[i].Attributes["type"]?.InnerText;
+                    }
+                }
+            }
+
+            nodes = doc.DocumentElement.SelectNodes("/config/startsWith/mapData");
+
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                string[] mappingKeys = nodes[i].InnerText.Split(',');
+
+                foreach (var key in mappingKeys)
+                {
+                    if (fieldName.StartsWith(key))
+                    {
+                        return nodes[i].Attributes["type"]?.InnerText;
+                    }
+                }
+            }
+
+            nodes = doc.DocumentElement.SelectNodes("/config/endsWith/mapData");
+
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                string[] mappingKeys = nodes[i].InnerText.Split(',');
+
+                foreach (var key in mappingKeys)
+                {
+                    if (fieldName.EndsWith(key))
+                    {
+                        return nodes[i].Attributes["type"]?.InnerText;
+                    }
+                }
+            }
+
+            nodes = doc.DocumentElement.SelectNodes("/config/equals/mapData");
+
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                string[] mappingKeys = nodes[i].InnerText.Split(',');
+
+                foreach (var key in mappingKeys)
+                {
+                    if (fieldName.Equals(key))
+                    {
+                        return nodes[i].Attributes["type"]?.InnerText;
+                    }
+                }
+            }
+
+            var license = doc.DocumentElement.SelectSingleNode("/config/license");
+
+            if (license.Attributes["author"].Value.ToString().Trim() != "Minh Tuan Do")
+            {
+                return "Can not run due to license violation";
+            }
+
+            //default:
+            return "int";
+        }
+
+        private int CountStringOccurrences(string text, string pattern)
+        {
+            // Loop through all instances of the string 'text'.
+            int count = 0;
+            int i = 0;
+            while ((i = text.IndexOf(pattern, i)) != -1)
+            {
+                i += pattern.Length;
+                count++;
+            }
+            return count;
+        }
+
+        private void btnCoppyMapping_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Clipboard.SetText(txtMappingModel.Text);
+            }
+            catch { }
         }
     }
 }

@@ -34,3 +34,12 @@ E:\Tools\QueryStringConverter\QueryStringConverter\obj\Debug\QueryStringConverte
 E:\Tools\QueryStringConverter\QueryStringConverter\obj\Debug\QueryStringConverter.csproj.GenerateResource.cache
 E:\Tools\QueryStringConverter\QueryStringConverter\obj\Debug\QueryStringConverter.exe
 E:\Tools\QueryStringConverter\QueryStringConverter\obj\Debug\QueryStringConverter.pdb
+D:\GitHub\query-string-converter\QueryStringConverter\bin\Debug\QueryStringConverter.exe.config
+D:\GitHub\query-string-converter\QueryStringConverter\bin\Debug\QueryStringConverter.exe
+D:\GitHub\query-string-converter\QueryStringConverter\bin\Debug\QueryStringConverter.pdb
+D:\GitHub\query-string-converter\QueryStringConverter\obj\Debug\QueryStringConverter.MainForm.resources
+D:\GitHub\query-string-converter\QueryStringConverter\obj\Debug\QueryStringConverter.Properties.Resources.resources
+D:\GitHub\query-string-converter\QueryStringConverter\obj\Debug\QueryStringConverter.csproj.GenerateResource.cache
+D:\GitHub\query-string-converter\QueryStringConverter\obj\Debug\QueryStringConverter.exe
+D:\GitHub\query-string-converter\QueryStringConverter\obj\Debug\QueryStringConverter.pdb
+D:\GitHub\query-string-converter\QueryStringConverter\obj\Debug\QueryStringConverter.csprojAssemblyReference.cache

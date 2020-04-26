@@ -39,6 +39,9 @@
             this.radioFramework = new System.Windows.Forms.RadioButton();
             this.radioFramework2 = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
+            this.txtMappingModel = new System.Windows.Forms.RichTextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.btnCoppyMapping = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtSQLQuery
@@ -46,7 +49,7 @@
             this.txtSQLQuery.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSQLQuery.Location = new System.Drawing.Point(12, 50);
             this.txtSQLQuery.Name = "txtSQLQuery";
-            this.txtSQLQuery.Size = new System.Drawing.Size(703, 460);
+            this.txtSQLQuery.Size = new System.Drawing.Size(703, 780);
             this.txtSQLQuery.TabIndex = 0;
             this.txtSQLQuery.Text = "";
             // 
@@ -134,17 +137,48 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(679, 523);
+            this.label4.Location = new System.Drawing.Point(602, 833);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(181, 17);
+            this.label4.Size = new System.Drawing.Size(339, 17);
             this.label4.TabIndex = 9;
-            this.label4.Text = "From Minh Tuan Do with ♥";
+            this.label4.Text = "From Minh Tuan Do with ♥ | github.com/minhtuando";
+            // 
+            // txtMappingModel
+            // 
+            this.txtMappingModel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtMappingModel.Location = new System.Drawing.Point(817, 548);
+            this.txtMappingModel.Name = "txtMappingModel";
+            this.txtMappingModel.Size = new System.Drawing.Size(703, 282);
+            this.txtMappingModel.TabIndex = 10;
+            this.txtMappingModel.Text = "";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(814, 528);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(104, 17);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "Mapping model";
+            // 
+            // btnCoppyMapping
+            // 
+            this.btnCoppyMapping.Location = new System.Drawing.Point(720, 548);
+            this.btnCoppyMapping.Name = "btnCoppyMapping";
+            this.btnCoppyMapping.Size = new System.Drawing.Size(94, 82);
+            this.btnCoppyMapping.TabIndex = 12;
+            this.btnCoppyMapping.Text = "COPY mapping model to clipboard!";
+            this.btnCoppyMapping.UseVisualStyleBackColor = true;
+            this.btnCoppyMapping.Click += new System.EventHandler(this.btnCoppyMapping_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1532, 549);
+            this.ClientSize = new System.Drawing.Size(1532, 859);
+            this.Controls.Add(this.btnCoppyMapping);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.txtMappingModel);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.radioFramework2);
             this.Controls.Add(this.radioFramework);
@@ -157,7 +191,8 @@
             this.Controls.Add(this.txtSQLQuery);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
-            this.Text = "Query String Converter 4.0";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Query String Converter 5.0";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -175,6 +210,9 @@
         private System.Windows.Forms.RadioButton radioFramework;
         private System.Windows.Forms.RadioButton radioFramework2;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.RichTextBox txtMappingModel;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button btnCoppyMapping;
     }
 }
 
