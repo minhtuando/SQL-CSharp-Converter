@@ -1,8 +1,10 @@
 # SQL-CSharp Converter
 
 A light and useful tool for converting between SQL query and C# programming language.
+
 Let's do coding faster.
-Don't do sleepy thing. Let's my tool does.
+
+Don't do sleepy thing. Let my tool does.
 
 ## Getting Started
 
